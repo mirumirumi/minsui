@@ -1,0 +1,240 @@
+{% extends "app_music_db/base.html" %}
+{% load mytag %}
+{% load static %}
+
+{% block meta %}
+<title>みんすい - みんなで作る吹奏楽音源データベース</title>
+<meta name="description" content="みんすいは、ユーザー投稿型の吹奏楽音源データベースです。気に入った演奏が収録されたCDの購入先リンクを調べたいときに便利です。お気に入りの演奏にひとこと感想を投稿することもできます。" />
+<meta name="keywords" content="吹奏楽,音源,データベース,DB,UGC,CD,アルバム" />
+<link rel="canonical" href="https://mirun.me/" />
+{% endblock %}
+
+{% block content %}
+<div class="desc-wrap">
+    <h2>このサイトは？</h2>
+    <p>みんすい(みんなで作る吹奏楽音源データベース)は、<strong>ユーザー投稿型の吹奏楽音源データベースサイト</strong>です。</p>
+    <p>特定の演奏が収録されたCDを逆引きで探せることを主目的としていますが、</p>
+    <ul>
+        <li>吹奏楽業界における演奏データの蓄積</li>
+        <li>「ひとこと感想」を交えたユーザー同士の交流</li>
+    </ul>
+    <p>なども目指しています。面倒なユーザー登録などはなしに、誰でも自由に各種投稿が行なえます。</p>
+    <p><a href="https://twitter.com/minsui_database" target="_blank">みんすいの公式Twitter</a>もぜひフォローをどうぞ。サイトの更新通知などはもちろん、私自身の吹奏楽の趣味アカウントとしても使っています。交流や情報共有などができたら幸いです。<br>詳しくは<a href="/about"">このサイトについて</a>でもお話しています。よろしければこちらもぜひ。</p>
+    <h3>使い方</h3>
+    <p>上部メニューの「追加」「アルバム一括追加」などから吹奏楽の音源に関するCDデータを入力し、サイトに登録することができます。アカウントなどは一切必要なく、どなたでも自由に投稿可能です。</p>
+    <p>また各音源データ右端の<img src="{% static 'expand-down.png' %}" style="height: 1em; margin: 0 0.23em 0.2em;">を押すと表示が展開され、「ひとこと感想」を閲覧・投稿できるようになります。これはコメントのような機能で、その音源データに紐付いてサイト上に保存されていきます。「お気に入りの演奏に対して思い出を投稿してみる」などがおすすめ！</p>
+    <p>音源データを探す際はこの下の各種検索機能を使うことをおすすめします。「フリーワード検索」に適当に打ち込めばとりあえず見つかるはずです。リスト最上部の<img src="{% static 'sort-arrow.png' %}" style="height: 1.3em; margin:0 0.3em;">でソート順の並び替えも可能です。</p>
+</div>
+<div class="form-check is-desc-open" style="cursor:pointer;">
+    <input class="form-check-input" type="checkbox" id="is-desc-open" style="cursor:pointer;">
+    <label class="form-check-label" for="is-desc-open" style="cursor:pointer;">この説明セクションをもう表示しない</label>
+</div>
+<div class="status-wrap">
+    <h2>現在の登録状況</h2>
+    <p>曲数　　　　　　：{{ song_quantity }}<br>
+    ひとこと感想　　：<span id="current-comment-quantity">{{ comment_quantity }}</span><br>
+    アルバム　　　　：2000年～2020年のコンクール自由曲データは全て追加済み（2005年大学・職場の部金賞団体以外と2007年Vol.9は除く）、その他「なにわ《オーケストラル》ウィンズ」全アルバム、一部のCDなど。吹奏楽ファンの皆様のお気に入りのアルバム追加を大募集中です。</p>
+</div>
+<div class="search-wrap">
+    <h2>検索する</h2>
+    <!-- <h3>１．絞り込んで一覧表示</h3> -->
+    <form action="" method="GET">
+        <div class="keyword-search-wrap">
+            <label for="keyword-search">フリーワード検索</label>
+            <input type="text" name="s" class="form-control fc-origin" id ="keyword-search" placeholder="複数ワード対応">
+        </div>
+        <div class="cd-type-wrap">
+            <label for="id_isContest">CDの種類</label>
+            <select name="c" class="form-control fc-origin" id="id_isContest" style="cursor:pointer;">
+                <option value="" selected="">指定なし</option>
+                <option value="1">コンクールCD</option>
+                <option value="2">それ以外のCD</option>
+            </select>
+        </div>
+        <div class="add-edit-wrap">
+            <label for="id_add-edit">追加/更新日時</label>
+            <select name="n" class="form-control fc-origin" id="id_add-edit" style="cursor:pointer;">
+                <option value="" selected="">指定なし</option>
+                <option value="add">最近追加されたもの(30日以内)</option>
+                <option value="edit">最近編集されたもの(30日以内)</option>
+            </select>
+        </div>
+        <!-- <div class="custom-control custom-switch new-item-wrap"  style="cursor:pointer;">
+            <input type="checkbox" class="custom-control-input" id="id_newItems" name="n" style="cursor:pointer;">
+            <label class="custom-control-label" for="id_newItems" style="cursor:pointer;">最近追加されたものだけ表示(30日以内)</label>
+        </div> -->
+        <div class="disp-quantity-wrap">
+            <label for="disp-quantity">表示件数</label>
+            <select name="q" class="form-control fc-origin" id="disp-quantity" style="cursor:pointer;">
+                <option value="25">25件</option>
+                <option value="50">50件</option>
+                <option value="" selected="">100件</option>
+                <option value="500">500件</option>
+                <option value="1000">1000件</option>
+                <option value="all">すべて</option>
+            </select>
+        </div>
+        <div class="search-btns-wrap">
+            <button type="submit" class="btn btn-info search">検索</button>
+            <div class="btn btn-outline-secondary" id="get-reset">リセット</div>
+        </div>
+    </form>
+    <!-- <div class="free-word-wrap">
+        <h3>２．リアルタイムページ内検索</h3>
+        <div class="input-group">
+            <input type="text" name="keyword" class="form-control fc-origin" id ="free-word" placeholder="単一ワードのみ">
+            <div class="input-group-append">
+                <button type="button" class="close" aria-label="Clear" id="word-clear">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        </div>
+    </div> -->
+</div>
+
+<div id="table-wrap">
+<table id="contents" class="table">
+<thead>
+    <tr>
+        <th>CDイメージ</th>
+        <th><div class="th-label">曲名</div><div class="th-arrow song-title"><i class="fas fa-sort-up"></i><i class="fas fa-sort-down"></i></div></th>
+        <th><div class="th-label">作曲者</div><div class="th-arrow song-composer"><i class="fas fa-sort-up"></i><i class="fas fa-sort-down"></i></div></th>
+        <th><div class="th-label">編曲者</div><div class="th-arrow song-arranger"><i class="fas fa-sort-up"></i><i class="fas fa-sort-down"></i></div></th>
+        <th><div class="th-label">演奏団体</div><div class="th-arrow song-artist"><i class="fas fa-sort-up"></i><i class="fas fa-sort-down"></i></div></th>
+        <th><div class="th-label">音源収録CD</div><div class="th-arrow song-cd"><i class="fas fa-sort-up"></i><i class="fas fa-sort-down"></i></div></th>
+        <th><div class="th-label">感想</div><div class="th-arrow comment-quantity"><i class="fas fa-sort-up"></i><i class="fas fa-sort-down"></i></div></th>
+        <th></th>
+    </tr>
+</thead>
+<tbody>
+    {% for song in song_list %}
+    <tr class="row-visible {{ song.id }}">
+            <td><a href="{{ song.cd_link }}" taget="_blank" class="thumb-img"><img src="{% static 'default.png' %}" data-src="https://images-na.ssl-images-amazon.com/images/P/{{ song.asin }}.09.LZZZZZZZ.jpg" alt="{{ song.cd }}" class="img-thumbnail lazy" width="100"></a></td>
+            <td class="song-title">{{ song.title }}</td>
+            <td class="song-composer">{{ song.composer }}</td>
+            <td class="song-arranger">{{ song.arranger }}</td>
+            <td class="song-artist">{{ song.artist }}</td>
+            <td class="song-cd"><a href="{{ song.cd_link }}" taget="_blank">{{ song.cd }}</a></td>
+            <td id="comment-{{ song.id }}" style="text-align:center;">{{ song.comment_set.count }}</td>
+            <td><div class="expand-down" id="{{ song.id }}"><i class="fas fa-chevron-down"></i></div></td>
+    </tr>
+    <tr class="row-invisible {{ song.id }}">
+        <td colspan="8">
+            <div class="comment">
+                {% for comment in song.comment_set.all %}
+                <div class="comment-body">
+                    <div class="comment-meta">
+                        <span class="comment-author">{{ comment.name }}</span>
+                        <span class="comment-datetime">{{ comment.created_at|date:"Y/n/j H:i" }}</span>
+                    </div>
+                    <div class="comment-text">{{ comment.text }}</div>
+                </div>
+                {% endfor %}
+            </div>
+            <button class="btn btn-info comment-window-open" data-toggle="modal" data-target="#exampleModalCentered">ひとこと感想を投稿する！</button>
+            <div class="data-footer">
+                <div class="share">
+                    <div class="share-message">\ この曲をシェアする /</div>
+                    <div class="share-buttons">
+                        <div class="share-button"><a class="a-twitter" href="https://twitter.com/intent/tweet?text=%20%23みんすい で見つけたよ！%0a{{ song.title }} / {{ song.artist }}%0a@minsui_database&url=https%3A%2F%2Fmirun.me%2F"><i class="fab fa-twitter"></i></a></div>
+                        <div class="share-button"><a class="a-line" href="https://line.me/R/msg/text/?みんすい(みんなで作る吹奏楽音源データベース)で見つけたよ！%0a{{ song.title }} / {{ song.artist }}%0ahttps%3A%2F%2Fmirun.me%2F"><i class="fab fa-line"></i></a></div>
+                        <div class="share-button"><a class="a-copy {{ song.id }}"><i class="fas fa-copy"></i></a></div>
+                    </div>
+                </div>
+                <div class="footer-component">
+                    <div class="edit-buttons">
+                        <a class="btn btn-outline-secondary" href="{% url 'app_music_db:edit' song.pk %}">情報の修正</a>
+                        <a class="btn btn-outline-danger" href="{% url 'app_music_db:delete' song.pk %}" style="margin-left: 0.3em;">削除申請</a>
+                    </div>
+                    <div class="footer-meta">データベースへの追加日時：{{ song.created_at }}</div>
+                </div>
+            </div>
+        </td>
+    </tr>
+    {% endfor %}
+</tbody>
+</table>
+<div class="scroll-hint-icon">
+    <div class="scroll-hint-text">横へスクロール！</div>
+</div>
+</div>
+
+<nav aria-label="Page navigation">
+    <ul class="pagination">
+        {% if page_obj.has_previous %}
+        <li class="page-item">
+            <a class="page-link" href="?{% url_replace request 'page'  page_obj.previous_page_number %}">
+                <i class="fas fa-angle-left"></i>
+            </a>
+        </li>
+        {% endif %}
+        
+        {% if page_obj.number >= 4 %}
+        <li class="page-item">
+            <a class="page-link" href="?{% url_replace request 'page' 1 %}">
+                <span aria-hidden="true">1</span>
+            </a>
+        </li>
+        <li class="page-item dots">
+            <span class="page-link">
+                <span aria-hidden="true">…</span>
+            </spn>
+        </li>
+        {% endif %}
+
+        {% for link_page in page_obj.paginator.page_range %}
+            {% if not link_page < page_obj.number|add:"-2" %}
+                {% if not link_page > page_obj.number|add:"2" %}
+                    {% if link_page == page_obj.number %}
+                    <li class="page-item active">
+                        <a class="page-link" href="?{% url_replace request 'page' link_page %}">
+                            {{ link_page }}
+                        </a>
+                    </li>
+                    {% else %}
+                    <li class="page-item">
+                        <a class="page-link" href="?{% url_replace request 'page' link_page %}">
+                            {{ link_page }}
+                        </a>
+                    </li>
+                    {% endif %}                
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+        
+        {% if page_obj.number <= page_obj.paginator.num_pages|add:"-3" %}
+        <li class="page-item dots">
+            <span class="page-link">
+                <span aria-hidden="true">…</span>
+            </spn>
+        </li>
+        <li class="page-item">
+            <a class="page-link" href="?{% url_replace request 'page' page_obj.paginator.num_pages %}">
+                <span aria-hidden="true">{{ page_obj.paginator.num_pages }}</span>
+            </a>
+        </li>
+        {% endif %}
+
+        {% if page_obj.has_next %}
+        <li class="page-item">
+            <a class="page-link" href="?{% url_replace request 'page' page_obj.next_page_number %}" aria-label="Next">
+                <i class="fas fa-angle-right"></i>
+            </a>
+        </li>
+        {% endif %}
+    </ul>
+</nav>
+
+<!-- みんすい_メインリスト(ボトム)_横長レスポンシブ -->
+<ins class="adsbygoogle yokonaga"
+     style="display:block"
+     data-ad-client="ca-pub-2873410957106428"
+     data-ad-slot="1540055683"
+     data-ad-format="rectangle"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+{% endblock %}
+

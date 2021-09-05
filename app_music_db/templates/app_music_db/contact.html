@@ -1,0 +1,40 @@
+{% extends "app_music_db/base.html" %}
+
+{% block meta %}
+<title>お問い合わせ - みんすい</title>
+<meta name="description" content="みんすいのお問い合わせページです。サイト管理者と連絡を取りたいときはこのページのお問い合わせフォームをご利用ください。" />
+<meta name="keywords" content="吹奏楽,音源,データベース,DB,お問い合わせ,contact,inquiry" />
+<link rel="canonical" href="https://mirun.me/contact" />
+{% endblock %}
+
+{% block content %}
+<h2>お問い合わせフォーム</h2>
+<p>みんすいのサイト管理者に連絡を取りたい場合にはこのページのお問い合わせフォームをご利用ください。<br>全てへの返信はお約束できませんが、頂いたメッセージには全て目を通しております。</p>
+<p>もっと気軽な連絡手段として<a href="https://twitter.com/minsui_database" target="_blank">Twitter</a>もご用意がありますので、あわせてご検討ください。</p>
+
+<form action="" method="POST" id="contact">
+<div class="form-wrap">
+    <div class="form-component">
+        <div class="form-label-wrap">おなまえ<span class="badge badge-secondary">任意</span></div>
+        <input type="text" name="name" class="form-control" value="匿名"></input>
+    </div>
+    <div class="form-component">
+        <div class="form-label-wrap">メールアドレス<span class="badge badge-danger required">必須</span></div>
+        <input type="email" name="mail" class="form-control" required></input>
+    </div>
+    <div class="form-component">
+        <div class="form-label-wrap">件名<span class="badge badge-secondary">任意</span></div>
+        <input type="text" name="subject" class="form-control"></input>
+    </div>
+    <div class="form-component">
+        <div class="form-label-wrap">お問い合わせ内容<span class="badge badge-danger required">必須</span></div>
+        <textarea type="text" name="content" class="form-control" required rows="7"></textarea>
+    </div>
+</div>
+    
+<div class="g-recaptcha" data-sitekey="6LdbP7cZAAAAAPVXjPyVDGeu9Z3EBiPMPJVGvyiZ" data-callback="recaptcha"></div>
+<button type="submit" class="btn btn-info submit" disabled>送信</button>
+{% csrf_token %}
+</form>
+{% endblock %}
+

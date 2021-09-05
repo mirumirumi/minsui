@@ -1,0 +1,82 @@
+{% extends "app_music_db/base.html" %}
+
+{% block meta %}
+<title>新規音源データ追加 - みんすい</title>
+<meta name="description" content="このページはみんすい(みんなで作る吹奏楽音源データベース)に新しい音源情報を追加するためのページです。" />
+<meta name="keywords" content="吹奏楽,音源,データベース,登録,新規追加" />
+<link rel="canonical" href="https://mirun.me/add" />
+{% endblock %}
+
+{% block content %}
+<div class="usage-wrap">
+    <h2>新しい音源データの登録フォーム</h2>
+    <p>音源データベースに新しい情報を登録するためのフォームです。</p>
+    <p>下に並ぶ各フォームに入力し、登録ボタンを押してください。そのまますぐにサイトに登録され、表示されます。
+        <br><span class="s-gray">（利用者はまだ増えないだろうと考え、しばらくは手動承認などはしないつもりです。明らかなスパムツールはreCAPTCHAで弾きます。）</span></p>
+    <h3>入力にあたって</h3>
+    <p>入力自体は特に難しくないと思いますが、いくつか補足しておきます。</p>
+    <ul>
+        <li>各項目にはサジェスト機能がついています。既にデータベース上に同じ文字を含むものがある場合候補に出てきますので、<strong>表記ゆれを減らす意味でなるべくサジェスト候補から選択していただけると良いかと思います。</strong></li>
+        <li>CDの購入先リンクは、現在はAmazonのみとしています。商品ページのURLを入力してください。</li>
+        <li>アルバムアートワークはAmazonのURLをもとに自動で取得されます（mp3しか販売がないAmazonページの場合は取得できません）。</li>
+        <li>「同じ曲名や演奏者でも違う演奏の場合がある」「演奏が同じでも複数のCDに収録されていることがある」などの理由により、<strong>データの重複をチェックする仕組みが実装されていません。</strong>しかしあとからいくらでも修正できますので、あまり気にしなくてOKです。</li>
+    </ul>
+</div>
+
+<form action="" method="POST" id="add-form">
+<h3>入力フォーム</h3>
+<div class="form-wrap">
+    <div class="form-component">
+        <div class="form-label-wrap">曲名<span class="badge badge-danger required">必須</span></div>
+        <input type="text" id="title-input" name="title" data-target="title" value="" autocomplete="off" data-url="/api/songs/get/" class="form-control suggest" maxlength="200" required="">
+        <ul id="title-list" class="dropdown"></ul>
+    </div>
+    <div class="form-component">
+        <div class="form-label-wrap">作曲者<span class="badge badge-danger required">必須</span></div>
+        <input type="text" id="composer-input" name="composer" data-target="composer" value="" autocomplete="off" data-url="/api/composers/get/" class="form-control suggest" maxlength="200" required="">
+        <ul id="composer-list" class="dropdown"></ul>
+    </div>
+    <div class="form-component">
+        <div class="form-label-wrap">編曲者<span class="badge badge-secondary">任意</span></div>
+        <input type="text" id="arranger-input" name="arranger" data-target="arranger" value="" autocomplete="off" data-url="/api/arrangers/get/" class="form-control suggest" maxlength="200">
+        <ul id="arranger-list" class="dropdown"></ul>
+    </div>
+    <div class="form-component">
+        <div class="form-label-wrap">演奏団体<span class="badge badge-danger required">必須</span></div>
+        <input type="text" id="artist-input" name="artist" data-target="artist" value="" autocomplete="off" data-url="/api/artists/get/" class="form-control suggest" maxlength="200" required="">
+        <ul id="artist-list" class="dropdown"></ul>
+    </div>
+    <div class="form-component">
+        <div class="form-label-wrap">収録CD名<span class="badge badge-danger required">必須</span></div>
+        <div class="cd-name-wrap">
+            <label><input class="custom-radio" type="radio" name="blnContest" value="contest">コンクールCDである</label>
+                <label id="year">
+                    {{ form.cdYear }}
+                </label>
+                <label id="vol">
+                    {{ form.cdVol }}
+                </label>
+            <label style="margin-top:1.3em"><input class="custom-radio" type="radio" name="blnContest" value="other">それ以外である</label>
+                <input type="text" id="cd-input" name="cd" data-target="cd" value="" autocomplete="off" data-url="/api/cds/get/" class="form-control suggest" maxlength="200" placeholder="CD名を入力">
+                <ul id="cd-list" class="dropdown"></ul>
+        </div>
+    </div>
+    <div class="form-component">
+        <div class="form-label-wrap">CD購入先リンク<span class="mini-txt">（AmazonのURLのみ）</span><span class="badge badge-danger required">必須</span></div>
+        <input type="text" name="cd_link" class="form-control" maxlength="500" required="" id="id_cd_link">
+    </div>
+</div>
+
+<div class="g-recaptcha" data-sitekey="6LdbP7cZAAAAAPVXjPyVDGeu9Z3EBiPMPJVGvyiZ" data-callback="recaptcha"></div>
+{{ form.media }} <!--for SuggestWidget-->
+<button type="submit" class="btn btn-info submit" id="add-edit-submit" disabled>登録する</button>
+{% csrf_token %}
+</form>
+
+{% endblock %}
+
+
+
+
+
+

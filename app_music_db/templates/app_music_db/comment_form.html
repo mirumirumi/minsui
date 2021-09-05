@@ -1,0 +1,17 @@
+{% extends "app_music_db/base.html" %}
+
+{% block content %}
+<form action="" method="POST"> <!--actionが空だと現在のページにデータを送信する-->
+    {{ form }}
+    <div class="g-recaptcha" data-sitekey="6LdbP7cZAAAAAPVXjPyVDGeu9Z3EBiPMPJVGvyiZ"></div>
+<button type="submit" class="btn btn-success submit" id="comment-submit">送信</button>
+{% csrf_token %}
+</form>
+
+{% endblock %}
+
+
+
+
+
+

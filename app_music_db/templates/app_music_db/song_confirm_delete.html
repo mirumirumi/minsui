@@ -1,0 +1,60 @@
+{% extends "app_music_db/base.html" %}
+
+{% block meta %}
+<title>削除申請({{ song.title }}/{{ song.artist }}) - みんすい</title>
+<meta name="description" content="このページはみんすい(みんなで作る吹奏楽音源データベース)に登録されている「{{ song.title }}/{{ song.artist }}」の削除申請ページです。" />
+<meta name="keywords" content="吹奏楽,音源,データベース,{{ song.title }},{{ song.artist }},{{ song.composer }},{{ song.cd }}" />
+<link rel="canonical" href="https://mirun.me/delete/{{ song.pk }}" />
+<meta name="robots" content="noindex">
+{% endblock %}
+
+{% block content %}
+<div class="usage-wrap">
+    <h2>削除申請 - {{ song.title }}</h2>
+    <p>この音源データに問題がある場合、サイト管理者に削除申請を提出することができます。下記フォームに理由を明記の上、リクエストを送信してください。</p>
+</div>
+
+<img src="https://images-na.ssl-images-amazon.com/images/P/{{ song.asin }}.09.LZZZZZZZ.jpg" class="img-thumbnail detail-img">
+<div class="form-wrap delete-form">
+    <div class="form-component">
+        <div class="form-label-wrap">曲名</div>
+        {{ song.title }}
+    </div>
+    <div class="form-component">
+        <div class="form-label-wrap">作曲者</div>
+        {{ song.composer }}
+    </div>
+    <div class="form-component">
+        <div class="form-label-wrap">編曲者</div>
+        {{ song.arranger }}
+    </div>
+    <div class="form-component">
+        <div class="form-label-wrap">演奏団体</div>
+        {{ song.artist }}
+    </div>
+    <div class="form-component">
+        <div class="form-label-wrap">収録CD名</div>
+        {{ song.cd }}
+    </div>
+    <div class="form-component">
+        <div class="form-label-wrap">CD購入先リンク</div>
+        <span id="cd-link">{{ song.cd_link }}</span>
+    </div>
+</div>
+
+<form action="" method="POST">
+    <p class="mt-5 form-label">削除申請をする理由</p>
+    <textarea type="text" name="reason" class="form-control" placeholder="重複している、スパム投稿など" required rows="3"></textarea>
+    
+    <div class="g-recaptcha" data-sitekey="6LdbP7cZAAAAAPVXjPyVDGeu9Z3EBiPMPJVGvyiZ" data-callback="recaptcha"></div>
+
+    <button type="submit" class="btn btn-danger submit" disabled>削除申請する</button>
+    {% csrf_token %}
+</form>
+{% endblock %}
+
+
+
+
+
+

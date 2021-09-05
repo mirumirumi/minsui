@@ -1,0 +1,78 @@
+{% extends "app_music_db/base.html" %}
+
+{% block meta %}
+<title>登録内容の修正({{ song.title }}/{{ song.artist }}) - みんすい</title>
+<meta name="description" content="このページはみんすい(みんなで作る吹奏楽音源データベース)に登録されている「{{ song.title }}/{{ song.artist }}」のページです。" />
+<meta name="keywords" content="吹奏楽,音源,データベース,{{ song.title }},{{ song.artist }},{{ song.composer }},{{ song.cd }}" />
+<link rel="canonical" href="https://mirun.me/edit/{{ song.pk }}" />
+{% endblock %}
+
+{% block content %}
+<div class="usage-wrap">
+    <h2>登録内容を修正 - {{ song.title }}</h2>
+    <p>現在登録されている内容がフォームに表示されているので、修正したい箇所を編集して登録ボタンを押してください。<strong><span style="color:#f35757;">無意味な連続修正や不正なデータ改ざんなど明らかなスパムと思われる方はIP遮断して即刻BANします。</span></strong></p>
+</div>
+
+<div class="msg-box">
+    <p>現在登録されている一部のデータは「編曲者」の情報が不十分です。特に"オーケストラアレンジもの"は実際に演奏される吹奏楽曲と作曲者が違うケースが多いですが、編集の都合で未記入となっています。</p>
+    <p>情報の追加をしてくださるという方は、各曲のこの修正フォームで追記していただければ幸いです。</p>
+    <p>「編曲者を書くか書かないか」「作曲者との線引きはどうなのか」などのルールは特にありません。多くの方に利用していただくためには複雑なルールはない方がいいと思っているからです。奮ってご利用ください！</p>
+</div>
+
+<form action="" method="POST" id="edit-form">
+<img src="https://images-na.ssl-images-amazon.com/images/P/{{ song.asin }}.09.LZZZZZZZ.jpg" class="img-thumbnail detail-img">
+<div class="form-wrap">
+    <div class="form-component">
+        <div class="form-label-wrap">曲名</div>
+        {{ form.title }}
+    </div>
+    <div class="form-component">
+        <div class="form-label-wrap">作曲者</div>
+        {{ form.composer }}
+    </div>
+    <div class="form-component">
+        <div class="form-label-wrap">編曲者<span class="mini-txt">（必要な場合）</span></div>
+        {% if form_arranger %}
+            <input type="text" id="arranger-input" name="arranger" data-target="arranger" value="" autocomplete="off" data-url="/api/arrangers/get/" class="form-control suggest" maxlength="200">
+            <ul id="arranger-list" class="dropdown"></ul>
+        {% else %}
+            {{ form.arranger }}
+        {% endif %}
+    </div>
+    <div class="form-component">
+        <div class="form-label-wrap">演奏団体</div>
+        {{ form.artist }}
+    </div>
+    <div class="form-component">
+        <div class="form-label-wrap">収録CD名</div>
+        <div class="cd-name-wrap">
+            <label><input class="custom-radio" type="radio" name="blnContest" value="contest">コンクールCDである</label>
+                <label id="year">
+                    {{ form.cdYear }}
+                </label>
+                <label id="vol">
+                    {{ form.cdVol }}
+                </label>
+            <label style="margin-top:1.3em"><input class="custom-radio" type="radio" name="blnContest" value="other">それ以外である</label>
+                {{ form.cd }}
+        </div>
+    </div>
+    <div class="form-component">
+        <div class="form-label-wrap">CD購入先リンク</div>
+        {{ form.cd_link }}
+    </div>
+</div>
+
+<div class="g-recaptcha" data-sitekey="6LdbP7cZAAAAAPVXjPyVDGeu9Z3EBiPMPJVGvyiZ" data-callback="recaptcha"></div>
+{{ form.media }} <!--for SuggestWidget-->
+<button type="submit" class="btn btn-info submit" id="add-edit-submit" disabled>登録する</button>
+{% csrf_token %}
+</form>
+
+{% endblock %}
+
+
+
+
+
+

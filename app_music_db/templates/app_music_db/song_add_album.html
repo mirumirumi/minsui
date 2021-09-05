@@ -1,0 +1,91 @@
+{% extends "app_music_db/base.html" %}
+{% load static %}
+
+{% block meta %}
+<title>アルバム一括追加フォーム - みんすい</title>
+<meta name="description" content="このページはみんすい(みんなで作る吹奏楽音源データベース)にアルバム一括追加をするためのページです。該当CDの情報と演奏団体の入力などをまとめて行うことができます。" />
+<meta name="keywords" content="吹奏楽,音源,データベース,アルバム" />
+<link rel="canonical" href="https://mirun.me/add-album" />
+{% endblock %}
+
+{% block content %}
+<div class="usage-wrap">
+    <h2>アルバム一括登録用フォーム</h2>
+    <p>同じアルバム（CD）の曲を一括で登録したい場合、このページのフォームを利用することでいくらかの手間が省略できます。</p>
+    <ul>
+        <li>「CD名」と「購入先リンク」は1回の入力で全ての曲に同じものが適用されます。チェックをONにすれば演奏団体も同様に省略できます。</li>
+        <li><strong>「曲名」「作曲者」「編曲者」は1行に1曲ずつ入力することで登録できるようになっている</strong>ため、順番を間違わないよう十分ご注意ください。</li>
+        <li>特に編曲者の場合、<strong>未入力は空行で対応する</strong>ことになるので慎重にご利用ください。</li>
+    </ul>
+    <p>最後の曲の編曲者を未入力にしたい場合、下記のような状態になっていればOKです。</p>
+    <p><img src="{% static 'arranger-example.png' %}" class="content-img"></p>
+    <p>これで計5曲分の一括入力をしていることになり、2曲目と4曲目に編曲者が登録されます。なお、複数行入力ではサジェスト機能は使えません。</p>
+</div>
+
+<form action="" method="POST" id="add-album-form">
+<h3>入力フォーム</h3>
+<div class="form-wrap">
+    <div class="form-component">
+        <div class="form-label-wrap">収録CD名<span class="badge badge-danger required">必須</span></div>
+        <div class="cd-name-wrap">
+            <label><input class="custom-radio" type="radio" name="blnContest" value="contest">コンクールCDである</label>
+                <label id="year">
+                    {{ form.cdYear }}
+                </label>
+                <label id="vol">
+                    {{ form.cdVol }}
+                </label>
+            <label style="margin-top:1.3em"><input class="custom-radio" type="radio" name="blnContest" value="other">それ以外である</label>
+                <input type="text" id="cd-input" name="cd" data-target="cd" value="" autocomplete="off" data-url="/api/cds/get/" class="form-control suggest" maxlength="200" placeholder="CD名を入力">
+                <ul id="cd-list" class="dropdown"></ul>
+        </div>
+    </div>
+    <div class="form-component">
+        <div class="form-label-wrap">CD購入先リンク<span class="mini-txt">（AmazonのURLのみ）</span><span class="badge badge-danger required">必須</span></div>
+        <input type="text" name="cd_link" class="form-control" maxlength="500" required="" id="id_cd_link">
+    </div>
+    <div class="form-component">
+        <div class="form-label-wrap">演奏団体<span class="badge badge-danger required">必須</span></div>
+        <div class="album-artist-input">
+            <div class="custom-control custom-switch">
+                <input type="checkbox" class="custom-control-input" id="is-same-artist" name="is-same-artist" checked="True">
+                <label class="custom-control-label" for="is-same-artist">入力をまとめる</label>
+            </div>
+            <input type="text" id="artist-input" name="artist-input" data-target="artist" value="" autocomplete="off" data-url="/api/artists/get/" class="form-control suggest album" maxlength="200" required="">
+            <ul id="artist-list" class="dropdown"></ul>
+            <textarea class="form-control album" id="artist-textarea" name="artist-textarea" data-target="artist" value="" autocomplete="off" data-url="/api/artists/get/" class="form-control suggest" rows="5" placeholder="1行に1曲ずつ入力"></textarea>
+            <ul id="title-list" class="dropdown"></ul>
+        </div>
+    </div>
+    <div class="form-component">
+        <div class="form-label-wrap">曲名<span class="badge badge-danger required">必須</span></div>
+        <textarea class="form-control album" id="title-textarea" name="title-textarea" data-target="title" value="" autocomplete="off" data-url="/api/songs/get/" class="form-control suggest" required="" rows="5" placeholder="1行に1曲ずつ入力"></textarea>
+        <ul id="title-list" class="dropdown"></ul>
+    </div>
+    <div class="form-component">
+        <div class="form-label-wrap">作曲者<span class="badge badge-danger required">必須</span></div>
+        <textarea class="form-control album" id="composer-textarea" name="composer-textarea" data-target="composer" value="" autocomplete="off" data-url="/api/composers/get/" class="form-control suggest" required="" rows="5" placeholder="1行に1曲ずつ入力"></textarea>
+        <ul id="composer-list" class="dropdown"></ul>
+    </div>
+    <div class="form-component">
+        <div class="form-label-wrap">編曲者<span class="badge badge-secondary">任意</span></div>
+        <textarea class="form-control album" id="arranger-textarea" name="arranger-textarea" data-target="arranger" value="" autocomplete="off" data-url="/api/arrangers/get/" class="form-control suggest" required="" rows="5" placeholder="1行に1曲ずつ入力（編曲者の入力は任意項目のため登録曲数と同じ行数になるように空行を入力してください）"></textarea>
+        <ul id="arranger-list" class="dropdown"></ul>
+    </div>
+</div>
+
+<input type="text" id="line-number" name="line-number">
+
+<div class="g-recaptcha" data-sitekey="6LdbP7cZAAAAAPVXjPyVDGeu9Z3EBiPMPJVGvyiZ" data-callback="recaptcha"></div>
+{{ form.media }} <!--for SuggestWidget-->
+<button type="submit" class="btn btn-info submit album-submit" disabled>登録する</button>
+{% csrf_token %}
+</form>
+
+{% endblock %}
+
+
+
+
+
+

@@ -1,0 +1,39 @@
+{
+  "name": "@fallroot/tada",
+  "version": "0.2.4",
+  "description": "Lightweight, no dependency library for lazy image load.",
+  "author": "CK Moon <fallroot@gmail.com>",
+  "main": "build/tada.js",
+  "scripts": {
+    "build": "webpack -p --config ./src/webpack.config.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fallroot/tada"
+  },
+  "bugs": {
+    "url": "https://github.com/fallroot/tada/issues"
+  },
+  "keywords": [
+    "lazy",
+    "load",
+    "intersectionobserver"
+  ],
+  "devDependencies": {
+    "@babel/core": "^7.0.1",
+    "@babel/preset-env": "^7.0.0",
+    "babel-loader": "^8.0.2",
+    "standard": "12.0.1",
+    "webpack": "^4.18.0",
+    "webpack-cli": "^3.1.0"
+  },
+  "license": "MIT",
+  "standard": {
+    "env": {
+      "browser": true
+    },
+    "ignore": [
+      "/build/"
+    ]
+  }
+}

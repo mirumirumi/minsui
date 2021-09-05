@@ -1,0 +1,163 @@
+{% load static %}
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    {% block meta %}
+    {% endblock %}
+    <meta name="author" content="みるみ">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-175512099-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-175512099-1');
+    </script>
+    <meta property="og:description" content="みんすいは、ユーザー投稿型の吹奏楽音源データベースです。気に入った演奏が収録されたCDの購入先リンクを調べたいときに便利です。お気に入りの演奏にひとこと感想を投稿することもできます。" />
+    <meta property="og:title" content="みんすい - みんなで作る吹奏楽音源データベース" />
+    <meta property="og:url" content="https://mirun.me" />
+    <meta property="og:image" content="{% static 'minsui-ogp-logo.png' %}" />
+    <meta property="og:site_name" content="みんすい - みんなで作る吹奏楽音源データベース" />
+    <meta property="og:locale" content="ja_JP" />
+    <meta property="fb:app_id" content="1268678030166535" />
+    <meta property="article:section" content="music" />
+    <meta property="article:tag" content="吹奏楽,音源,データベース,DB,UGC,CD,アルバム" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta property="twitter:description" content="みんすいは、ユーザー投稿型の吹奏楽音源データベースです。気に入った演奏が収録されたCDの購入先リンクを調べたいときに便利です。お気に入りの演奏にひとこと感想を投稿することもできます。" />
+    <meta property="twitter:title" content="みんすい - みんなで作る吹奏楽音源データベース" />
+    <meta property="twitter:url" content="https://mirun.me" />
+    <meta name="twitter:image" content="{% static 'minsui-ogp-logo.png' %}" />
+    <meta name="twitter:domain" content="mirun.me" />
+    <link rel='preconnect dns-prefetch' href="//www.google-analytics.com">
+    <link rel="preconnect dns-prefetch" href="//pagead2.googlesyndication.com">
+    <link rel="preconnect dns-prefetch" href="//googleads.g.doubleclick.net">
+    <link rel="preconnect dns-prefetch" href="//tpc.googlesyndication.com">
+    <link rel="preconnect dns-prefetch" href="//ad.doubleclick.net">
+    <link rel="preconnect dns-prefetch" href="//www.gstatic.com">
+    <link rel="preconnect dns-prefetch" href="//stackpath.bootstrapcdn.com" />
+    <link rel="preconnect dns-prefetch" href="//ajax.googleapis.com" />
+    <link rel="preconnect dns-prefetch" href="//cdnjs.cloudflare.com" />
+    <link rel="preconnect dns-prefetch" href="//fonts.googleapis.com" />
+    <link rel="preconnect dns-prefetch" href="//cdn.jsdelivr.net" />
+    <link rel="preconnect dns-prefetch" href="//www.google.com" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.1/css/all.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <link rel="icon" href="{% static 'favicon.png' %}"/>
+    <link rel="apple-touch-icon-precomposed" href="{% static 'favicon.png' %}" />
+    <meta name="msapplication-TileImage" content="{% static 'favicon.png' %}" />
+  </head>
+
+  <body>
+    <div class="notify-area"></div>
+    <header>
+        <div class="container">
+            <div class="site-title">
+                <h1><a href="https://mirun.me/"><img src="{% static 'minsui-site-logo.png' %}"></a></h1>
+                <!-- <span class="site-phrase">みんなで作る吹奏楽音源データベース</span> -->
+                <li class="nav-item dropdown mobile-share">
+                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><i class="fas fa-share-alt"></i></a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fmirun.me%2F&t=%E3%81%BF%E3%82%93%E3%81%99%E3%81%84%20-%20%E3%81%BF%E3%82%93%E3%81%AA%E3%81%A7%E4%BD%9C%E3%82%8B%E5%90%B9%E5%A5%8F%E6%A5%BD%E9%9F%B3%E6%BA%90%E3%83%87%E3%83%BC%E3%82%BF%E3%83%99%E3%83%BC%E3%82%B9"><i class="fab fa-facebook-f"></i>Facebook</a>
+                        <a class="dropdown-item" href="https://twitter.com/intent/tweet?text=みんすい - みんなで作る吹奏楽音源データベース%0a@minsui_database&url=https%3A%2F%2Fmirun.me%2F"><i class="fab fa-twitter"></i>Twitter</a>
+                        <a class="dropdown-item" href="https://getpocket.com/edit?url=https://mirun.me/"><i class="fab fa-get-pocket"></i>Pocket</a>
+                        <a class="dropdown-item" href="https://timeline.line.me/social-plugin/share?url=https%3A%2F%2Fmirun.me%2F"><i class="fab fa-line"></i>LINE</a>
+                    </div>
+                </li>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-link 1"><a href="{% url 'app_music_db:index' %}"><!--<i class="fas fa-sort-alpha-down">--></i>一覧</a></li>
+                <li class="nav-link 2"><a href="{% url 'app_music_db:add' %}"><!--<i class="fas fa-edit"></i>-->追加</a></li>
+                <li class="nav-link 3"><a href="{% url 'app_music_db:add_album' %}"><!--<i class="fas fa-compact-disc"></i>-->アルバム一括追加</a></li>
+            </ul>
+            <div class="sns-share">
+                <ul>
+                    <li><a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fmirun.me%2F&t=%E3%81%BF%E3%82%93%E3%81%99%E3%81%84%20-%20%E3%81%BF%E3%82%93%E3%81%AA%E3%81%A7%E4%BD%9C%E3%82%8B%E5%90%B9%E5%A5%8F%E6%A5%BD%E9%9F%B3%E6%BA%90%E3%83%87%E3%83%BC%E3%82%BF%E3%83%99%E3%83%BC%E3%82%B9" class="a-facebook" target="_blank"><i class="fab fa-facebook-f"></i></a></li>
+                    <li><a href="https://twitter.com/intent/tweet?text=みんすい - みんなで作る吹奏楽音源データベース%0a@minsui_database&url=https%3A%2F%2Fmirun.me%2F" class="a-twitter" target="_blank"><i class="fab fa-twitter"></i></a></li>
+                    <li><a href="https://getpocket.com/edit?url=https://mirun.me/" class="a-pocket" target="_blank"><i class="fab fa-get-pocket"></i></a></li>
+                    <li><a href="https://timeline.line.me/social-plugin/share?url=https%3A%2F%2Fmirun.me%2F" class="a-line" target="_blank"><i class="fab fa-line"></i></a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+    <main class="container">
+        <!-- みんすい_共通(トップ)_横長レスポンシブ -->
+        <ins class="adsbygoogle yokonaga"
+             style="display:block;"
+             data-ad-client="ca-pub-2873410957106428"
+             data-ad-slot="9418545708"
+             data-full-width-responsive="false"></ins>
+        <script>
+             (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <div class="modal fade" id="exampleModalCentered" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenteredLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content" id="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalCenteredLabel">ひとこと感想の投稿</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <form method="POST" action="">
+                    <div class="modal-body">
+                        {{ comment_form.as_p }}
+                        <div class="g-recaptcha" data-sitekey="6LdbP7cZAAAAAPVXjPyVDGeu9Z3EBiPMPJVGvyiZ" data-callback="recaptcha"></div>
+                        {% csrf_token %}
+                    </div>
+                    <div class="modal-footer">
+                        <button id="comment-submit" type="submit" class="btn btn-info" disabled>投稿する</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" id="close-button">やめる</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="copy-alert">曲情報をコピーしました</div>
+
+    <footer>
+        <div class="container">
+            <ul class="nav justify-content-center footer-link">
+                <li class="nav-item">
+                  <a class="nav-link" href="/about">このサイトについて</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="https://twitter.com/minsui_database">みんすいTwitter</a>
+                  <!-- <a class="nav-link" href="https://milmemo.net/">管理人のブログ</a> -->
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="/privacy-policy">プライバシーポリシー</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="/contact">お問い合わせ</a>
+                </li>
+            </ul>
+            <div class="footer-copyright">
+                <span class="copyright-content">© 2020 <a href="/"">みんすい - みんなで作る吹奏楽音源データベース</a></span>
+            </div>
+        </div>
+
+    </footer>
+
+    <div class="top-btn">
+        <i class="fas fa-arrow-up"></i>
+    </div>
+
+    <script defer src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script defer src="{% static 'tada.js' %}"></script>
+    <script defer src="{% static 'script.js' %}"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script defer src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+    <script defer src="https://www.google.com/recaptcha/api.js"></script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  </body>
+</html>
